@@ -2,84 +2,103 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Clicker CPS</title>
+  <title>Clicker Best Score</title>
 
   <style>
     body {
       margin: 0;
+      overflow: hidden;
       font-family: Arial;
       background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .card {
-      text-align: center;
-      background: #1e1e1e;
-      padding: 40px;
-      border-radius: 20px;
-      width: 320px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
 
     .score {
-      font-size: 40px;
-      margin: 15px 0;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-size: 24px;
+      z-index: 1000;
     }
 
-    .cps {
+    .best {
+      position: fixed;
+      top: 40px;
+      left: 10px;
       font-size: 18px;
-      color: #aaa;
+      color: #ffd700;
+      z-index: 1000;
     }
 
-    button {
-      padding: 15px 25px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
+    .circle {
+      position: absolute;
+      width: 60px;
+      height: 60px;
       background: #00c853;
-      color: white;
-      margin-top: 20px;
-      transition: 0.2s;
-    }
-
-    button:hover {
-      transform: scale(1.05);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      user-select: none;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="card">
-    <h1>🎮 CPS Clicker</h1>
+  <div class="score">
+    Score: <span id="score">0</span>
+  </div>
 
-    <div class="score" id="score">0</div>
-    <div class="cps">CPS: <span id="cps">0</span></div>
-
-    <button onclick="clickBtn()">CLICK!</button>
+  <div class="best">
+    🏆 Your best: <span id="best">0</span>
   </div>
 
   <script>
     let score = 0;
-    let clicks = 0;
 
-    function clickBtn() {
-      score++;
-      clicks++;
+    // 📦 cargar best score guardado
+    let bestScore = localStorage.getItem("bestScore") || 0;
+    document.getElementById("best").innerText = bestScore;
 
+    function updateScore() {
       document.getElementById("score").innerText = score;
+
+      // 🧠 actualizar best score
+      if (score > bestScore) {
+        bestScore = score;
+        localStorage.setItem("bestScore", bestScore);
+        document.getElementById("best").innerText = bestScore;
+      }
     }
 
-    // 📊 calcular CPS cada segundo
-    setInterval(() => {
-      document.getElementById("cps").innerText = clicks;
-      clicks = 0; // reset para medir cada segundo
-    }, 1000);
+    function createCircle() {
+      const circle = document.createElement("div");
+      circle.className = "circle";
+      circle.innerText = "+10";
+
+      const x = Math.random() * (window.innerWidth - 60);
+      const y = Math.random() * (window.innerHeight - 60);
+
+      circle.style.left = x + "px";
+      circle.style.top = y + "px";
+
+      circle.onclick = () => {
+        score += 10;
+        updateScore();
+        circle.remove();
+      };
+
+      document.body.appendChild(circle);
+
+      setTimeout(() => {
+        circle.remove();
+      }, 1500);
+    }
+
+    setInterval(createCircle, 700);
   </script>
 
 </body>
