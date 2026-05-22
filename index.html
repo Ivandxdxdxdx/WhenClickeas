@@ -2,13 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Clicker Game</title>
+  <title>Clicker CPS</title>
 
   <style>
     body {
       margin: 0;
       font-family: Arial;
-      background: linear-gradient(135deg, #141e30, #243b55);
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: white;
       display: flex;
       justify-content: center;
@@ -18,20 +18,21 @@
 
     .card {
       text-align: center;
-      background: #1f1f1f;
+      background: #1e1e1e;
       padding: 40px;
       border-radius: 20px;
+      width: 320px;
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      width: 300px;
-    }
-
-    h1 {
-      margin-bottom: 10px;
     }
 
     .score {
       font-size: 40px;
-      margin: 20px 0;
+      margin: 15px 0;
+    }
+
+    .cps {
+      font-size: 18px;
+      color: #aaa;
     }
 
     button {
@@ -42,6 +43,7 @@
       cursor: pointer;
       background: #00c853;
       color: white;
+      margin-top: 20px;
       transition: 0.2s;
     }
 
@@ -54,20 +56,30 @@
 <body>
 
   <div class="card">
-    <h1>🎮 Clicker Game</h1>
+    <h1>🎮 CPS Clicker</h1>
 
     <div class="score" id="score">0</div>
+    <div class="cps">CPS: <span id="cps">0</span></div>
 
-    <button onclick="addPoint()">CLICK!</button>
+    <button onclick="clickBtn()">CLICK!</button>
   </div>
 
   <script>
     let score = 0;
+    let clicks = 0;
 
-    function addPoint() {
+    function clickBtn() {
       score++;
+      clicks++;
+
       document.getElementById("score").innerText = score;
     }
+
+    // 📊 calcular CPS cada segundo
+    setInterval(() => {
+      document.getElementById("cps").innerText = clicks;
+      clicks = 0; // reset para medir cada segundo
+    }, 1000);
   </script>
 
 </body>
