@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Clicker Game</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      text-align: center;
+      background: #1f1f1f;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      width: 300px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .score {
+      font-size: 40px;
+      margin: 20px 0;
+    }
+
+    button {
+      padding: 15px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #00c853;
+      color: white;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h1>🎮 Clicker Game</h1>
+
+    <div class="score" id="score">0</div>
+
+    <button onclick="addPoint()">CLICK!</button>
+  </div>
+
+  <script>
+    let score = 0;
+
+    function addPoint() {
+      score++;
+      document.getElementById("score").innerText = score;
+    }
+  </script>
+
+</body>
+</html>
