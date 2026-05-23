@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Clicker Game</title>
+  <title>Clicker Shop</title>
 
   <style>
     body {
@@ -14,20 +14,6 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      overflow: hidden;
-    }
-
-    /* 🔵 LOADING SCREEN */
-    #loading {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 24px;
-      z-index: 999;
     }
 
     .card {
@@ -35,7 +21,7 @@
       background: #1e1e1e;
       padding: 40px;
       border-radius: 20px;
-      width: 320px;
+      width: 340px;
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
 
@@ -50,25 +36,28 @@
     }
 
     button {
-      padding: 20px 40px;
-      font-size: 22px;
+      padding: 15px 20px;
+      font-size: 16px;
       border: none;
-      border-radius: 15px;
+      border-radius: 10px;
       cursor: pointer;
+      margin: 5px;
       background: #00c853;
       color: white;
+    }
+
+    .shop button {
+      background: #333;
+      width: 100%;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- 🔵 LOADING -->
-  <div id="loading">Cargando juego...</div>
-
-  <!-- 🎮 GAME -->
   <div class="card">
-    <h1>🎮 Clicker</h1>
+
+    <h1>🎮 Clicker Shop</h1>
 
     <div class="best">
       🏆 Best: <span id="best">0</span>
@@ -79,9 +68,11 @@
     </div>
 
     <button onclick="clickBtn()">CLICK</button>
-    <br><br>
 
-    <button onclick="buyAuto()">🤖 AutoClick (50)</button>
+    <div class="shop">
+      <button onclick="buyPower()">💰 +1 por click (coste: 50)</button>
+      <button onclick="buyAuto()">🤖 AutoClick (coste: 100)</button>
+    </div>
 
   </div>
 
@@ -90,7 +81,6 @@
     let perClick = 1;
     let auto = false;
 
-    // 🏆 best score
     let best = localStorage.getItem("best") || 0;
     document.getElementById("best").innerText = best;
 
@@ -109,25 +99,28 @@
       update();
     }
 
-    function buyAuto() {
-      if (score >= 50 && !auto) {
+    // 💰 mejora click
+    function buyPower() {
+      if (score >= 50) {
         score -= 50;
+        perClick += 1;
+        update();
+      }
+    }
+
+    // 🤖 autoclick
+    function buyAuto() {
+      if (score >= 100 && !auto) {
+        score -= 100;
         auto = true;
         update();
 
-        // 🤖 auto click cada 500ms
         setInterval(() => {
           score += perClick;
           update();
         }, 500);
       }
     }
-
-    // ⏳ loading fake
-    setTimeout(() => {
-      document.getElementById("loading").style.display = "none";
-    }, 1500);
-
   </script>
 
 </body>
