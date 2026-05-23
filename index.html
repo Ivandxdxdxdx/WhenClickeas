@@ -14,6 +14,20 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      overflow: hidden;
+    }
+
+    /* 🔵 LOADING SCREEN */
+    #loading {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      z-index: 999;
     }
 
     .card {
@@ -43,26 +57,17 @@
       cursor: pointer;
       background: #00c853;
       color: white;
-      transition: 0.2s;
-    }
-
-    button:hover {
-      transform: scale(1.05);
-    }
-
-    .shop button {
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 14px;
-      background: #333;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="card">
+  <!-- 🔵 LOADING -->
+  <div id="loading">Cargando juego...</div>
 
+  <!-- 🎮 GAME -->
+  <div class="card">
     <h1>🎮 Clicker</h1>
 
     <div class="best">
@@ -74,22 +79,22 @@
     </div>
 
     <button onclick="clickBtn()">CLICK</button>
+    <br><br>
 
-    <div class="shop">
-      <button onclick="upgrade()">💰 +1 por click (coste: 50)</button>
-    </div>
+    <button onclick="buyAuto()">🤖 AutoClick (50)</button>
 
   </div>
 
   <script>
     let score = 0;
     let perClick = 1;
+    let auto = false;
 
+    // 🏆 best score
     let best = localStorage.getItem("best") || 0;
     document.getElementById("best").innerText = best;
 
-    function clickBtn() {
-      score += perClick;
+    function update() {
       document.getElementById("score").innerText = score;
 
       if (score > best) {
@@ -99,13 +104,30 @@
       }
     }
 
-    function upgrade() {
-      if (score >= 50) {
+    function clickBtn() {
+      score += perClick;
+      update();
+    }
+
+    function buyAuto() {
+      if (score >= 50 && !auto) {
         score -= 50;
-        perClick += 1;
-        document.getElementById("score").innerText = score;
+        auto = true;
+        update();
+
+        // 🤖 auto click cada 500ms
+        setInterval(() => {
+          score += perClick;
+          update();
+        }, 500);
       }
     }
+
+    // ⏳ loading fake
+    setTimeout(() => {
+      document.getElementById("loading").style.display = "none";
+    }, 1500);
+
   </script>
 
 </body>
