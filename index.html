@@ -2,103 +2,110 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Clicker Best Score</title>
+  <title>Clicker Game</title>
 
   <style>
     body {
       margin: 0;
-      overflow: hidden;
       font-family: Arial;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background: linear-gradient(135deg, #141e30, #243b55);
       color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      text-align: center;
+      background: #1e1e1e;
+      padding: 40px;
+      border-radius: 20px;
+      width: 320px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
 
     .score {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      font-size: 24px;
-      z-index: 1000;
+      font-size: 40px;
+      margin: 20px 0;
     }
 
     .best {
-      position: fixed;
-      top: 40px;
-      left: 10px;
-      font-size: 18px;
-      color: #ffd700;
-      z-index: 1000;
+      color: gold;
+      margin-bottom: 10px;
     }
 
-    .circle {
-      position: absolute;
-      width: 60px;
-      height: 60px;
-      background: #00c853;
-      border-radius: 50%;
+    button {
+      padding: 20px 40px;
+      font-size: 22px;
+      border: none;
+      border-radius: 15px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      user-select: none;
+      background: #00c853;
+      color: white;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .shop button {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 14px;
+      background: #333;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="score">
-    Score: <span id="score">0</span>
-  </div>
+  <div class="card">
 
-  <div class="best">
-    🏆 Your best: <span id="best">0</span>
+    <h1>🎮 Clicker</h1>
+
+    <div class="best">
+      🏆 Best: <span id="best">0</span>
+    </div>
+
+    <div class="score">
+      <span id="score">0</span>
+    </div>
+
+    <button onclick="clickBtn()">CLICK</button>
+
+    <div class="shop">
+      <button onclick="upgrade()">💰 +1 por click (coste: 50)</button>
+    </div>
+
   </div>
 
   <script>
     let score = 0;
+    let perClick = 1;
 
-    // 📦 cargar best score guardado
-    let bestScore = localStorage.getItem("bestScore") || 0;
-    document.getElementById("best").innerText = bestScore;
+    let best = localStorage.getItem("best") || 0;
+    document.getElementById("best").innerText = best;
 
-    function updateScore() {
+    function clickBtn() {
+      score += perClick;
       document.getElementById("score").innerText = score;
 
-      // 🧠 actualizar best score
-      if (score > bestScore) {
-        bestScore = score;
-        localStorage.setItem("bestScore", bestScore);
-        document.getElementById("best").innerText = bestScore;
+      if (score > best) {
+        best = score;
+        localStorage.setItem("best", best);
+        document.getElementById("best").innerText = best;
       }
     }
 
-    function createCircle() {
-      const circle = document.createElement("div");
-      circle.className = "circle";
-      circle.innerText = "+10";
-
-      const x = Math.random() * (window.innerWidth - 60);
-      const y = Math.random() * (window.innerHeight - 60);
-
-      circle.style.left = x + "px";
-      circle.style.top = y + "px";
-
-      circle.onclick = () => {
-        score += 10;
-        updateScore();
-        circle.remove();
-      };
-
-      document.body.appendChild(circle);
-
-      setTimeout(() => {
-        circle.remove();
-      }, 1500);
+    function upgrade() {
+      if (score >= 50) {
+        score -= 50;
+        perClick += 1;
+        document.getElementById("score").innerText = score;
+      }
     }
-
-    setInterval(createCircle, 700);
   </script>
 
 </body>
